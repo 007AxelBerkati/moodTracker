@@ -1,22 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { MoodPicker } from '../components/MoodPicker';
-import { MoodOptionType, MoodOptionWithTimestamp } from '../type';
-import { MoodItemRow } from '../components/MoodItemRow';
+import { useAppContext } from '../App.provider';
 
 export const Home: React.FC = () => {
-  const [moodList, setMoodList] = useState<MoodOptionWithTimestamp[]>([]);
-
-  const handleSelectedMood = useCallback((mood: MoodOptionType) => {
-    setMoodList(curent => [...curent, { mood, timestamp: Date.now() }]);
-  }, []);
+  const appContext = useAppContext();
 
   return (
     <View style={styles.container}>
-      <MoodPicker onSelect={handleSelectedMood} />
-      {moodList.map(item => (
-        <MoodItemRow key={item.timestamp} item={item} />
-      ))}
+      <MoodPicker onSelect={appContext.handleSelectMood} />
     </View>
   );
 };
