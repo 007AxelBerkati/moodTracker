@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { theme } from '../theme';
 import { MoodOptionType } from '../type';
+import { butterFlies } from '../assets';
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
@@ -17,20 +18,33 @@ type MoodPickerProps = {
 
 export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
+  const [hasSelected, setHasSelected] = useState(false);
 
   const handleSelect = useCallback(() => {
     if (selectedMood) {
       onSelect(selectedMood);
       setSelectedMood(undefined);
+      setHasSelected(true);
     }
   }, [onSelect, selectedMood]);
+
+  if (hasSelected) {
+    return (
+      <View style={styles.container}>
+        <Image source={butterFlies} style={styles.image} />
+        <Pressable style={styles.button} onPress={() => setHasSelected(false)}>
+          <Text style={styles.buttonText}>Back</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How Are You Right Now?</Text>
       <View style={styles.moodList}>
         {moodOptions.map(option => (
-          <View>
+          <View key={option.emoji}>
             <Pressable
               onPress={() => setSelectedMood(option)}
               key={option.emoji}
@@ -58,20 +72,22 @@ export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: theme.colorWhite,
     borderWidth: 2,
     borderColor: theme.colorPurple,
     borderRadius: 10,
     margin: 10,
+    justifyContent: 'space-between',
+    height: 230,
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 
   heading: {
     fontSize: 20,
     letterSpacing: 1,
-    color: theme.colorPurple,
     textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 20,
+    color: theme.colorWhite,
   },
   moodText: {
     fontSize: 24,
@@ -118,5 +134,9 @@ const styles = StyleSheet.create({
 
   emoji: {
     fontSize: 20,
+  },
+  image: {
+    alignSelf: 'center',
+    resizeMode: 'contain',
   },
 });
