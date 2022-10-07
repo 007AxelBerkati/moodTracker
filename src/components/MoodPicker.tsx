@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     letterSpacing: 1,
     textAlign: 'center',
-    fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily: theme.fontFamilyBold,
     color: theme.colorWhite,
   },
   moodText: {
     fontSize: 24,
-    color: 'black',
+    fontFamily: theme.fontFamilyLight,
   },
   moodList: {
     flexDirection: 'row',
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 10,
     color: '#454C73',
-    fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: theme.fontFamilyBold,
   },
   button: {
     backgroundColor: theme.colorPurple,
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: theme.colorWhite,
     fontSize: 16,
+    fontFamily: theme.fontFamilyBold,
   },
 
   emoji: {
