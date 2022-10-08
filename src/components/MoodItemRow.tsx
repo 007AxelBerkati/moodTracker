@@ -11,6 +11,7 @@ import { MoodOptionWithTimestamp } from '../type';
 import { theme } from '../theme';
 import { useAppContext } from '../App.provider';
 import {
+  GestureHandlerRootView,
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
