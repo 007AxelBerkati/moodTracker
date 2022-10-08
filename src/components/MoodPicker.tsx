@@ -3,7 +3,10 @@ import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { theme } from '../theme';
 import { MoodOptionType } from '../type';
 import { butterFlies } from '../assets';
-import Reanimated, { useAnimatedStyle } from 'react-native-reanimated';
+import Reanimated, {
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
@@ -25,7 +28,8 @@ export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
 
   const buttonStyle = useAnimatedStyle(
     () => ({
-      opacity: selectedMood ? 1 : 0.5,
+      opacity: selectedMood ? withTiming(1) : withTiming(0.5),
+      transform: [{ scale: selectedMood ? withTiming(1) : 0.8 }],
     }),
     [selectedMood],
   );
