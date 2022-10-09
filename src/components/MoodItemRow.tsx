@@ -1,17 +1,13 @@
+import format from 'date-fns/format';
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
   LayoutAnimation,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import format from 'date-fns/format';
-import { MoodOptionWithTimestamp } from '../type';
-import { theme } from '../theme';
-import { useAppContext } from '../App.provider';
 import {
-  GestureHandlerRootView,
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
@@ -22,6 +18,9 @@ import Reanimated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useAppContext } from '../App.provider';
+import { theme } from '../theme';
+import { MoodOptionWithTimestamp } from '../type';
 
 type MoodItemRowProps = {
   item: MoodOptionWithTimestamp;

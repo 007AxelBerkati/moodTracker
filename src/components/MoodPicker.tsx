@@ -7,6 +7,8 @@ import Reanimated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import Sound from 'react-native-sound';
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
@@ -20,9 +22,31 @@ type MoodPickerProps = {
   onSelect: (mood: MoodOptionType) => void;
 };
 
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSetting: false,
+};
+
+var whoosh = new Sound('example.mp3', Sound.MAIN_BUNDLE, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+  // loaded successfully
+  console.log(
+    'duration in seconds: ' +
+      whoosh.getDuration() +
+      'number of channels: ' +
+      whoosh.getNumberOfChannels(),
+  );
+});
+
 export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
   const [hasSelected, setHasSelected] = useState(false);
+  const [start, setStart] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const [counter, setCounter] = useState(0);
 
   const ReanimatePressable = Reanimated.createAnimatedComponent(Pressable);
 
@@ -36,9 +60,23 @@ export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
 
   const handleSelect = useCallback(() => {
     if (selectedMood) {
+      ReactNativeHapticFeedback.trigger('impactLight', options);
       onSelect(selectedMood);
       setSelectedMood(undefined);
       setHasSelected(true);
+      if (!start) {
+        whoosh.play();
+        const myTimer = setInterval(() => {
+          setCounter(counter => counter - 1);
+        }, 1000);
+        setTimer(myTimer);
+        setStart(start => !start);
+      } else {
+        whoosh.pause();
+        clearInterval(timer);
+        setCounter(null);
+        setStart(start => !start);
+      }
     }
   }, [onSelect, selectedMood]);
 
@@ -46,7 +84,13 @@ export const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
     return (
       <View style={styles.container}>
         <Image source={butterFlies} style={styles.image} />
-        <Pressable style={styles.button} onPress={() => setHasSelected(false)}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            setHasSelected(false);
+            setStart(false);
+            whoosh.pause();
+          }}>
           <Text style={styles.buttonText}>Back</Text>
         </Pressable>
       </View>
